@@ -13,13 +13,17 @@ stories.addDecorator((story) => (
 	<div className="container theme--white" style={{ display: "flex" }}>{story()}</div>
 ));
 
-const GraphExample = ({showText = true}) => {
+const graphHeight = 1000;
+const graphWidth = 1000;
+
+const GraphExample = ({simple = false}) => {
 	const nodeHeight = 64;
 	const nodeWidth = 200;
 	const circleSize = 64;
 
 	return (
-		<svg height="1000" width="1000">
+		<div style={{ height: graphHeight, width: graphWidth, backgroundColor: "#fff" }}>
+			<svg height="100%" width="100%">
 				<Edge
 					source={{ x: 200, y: 132 }}
 					target={{ x: 600, y: 132 }}
@@ -32,24 +36,32 @@ const GraphExample = ({showText = true}) => {
 					height={nodeHeight}
 					width={nodeWidth}>
 					<Card
-						title={showText && 'Title'}
-						description={showText && 'Description'}
-						renderIcon={<User16 />}
+						title={!simple && 'Title'}
+						description={!simple && 'Description'}
+						renderIcon={!simple && <User16 />}
 					/>
 				</foreignObject>
 
 				<foreignObject
 					style={{ overflow: 'visible' }}
 					transform={`translate(${600},${100})`}>
-					<Circle title={showText && 'Title'} size={circleSize} renderIcon={<Wikis16 />} />
+					<Circle title={!simple && 'Title'} size={circleSize} renderIcon={!simple && <Wikis16 />} />
 				</foreignObject>
-		</svg>)
+			</svg>
+		</div>
+	)
 }
 
-stories.add('PanZoom', () => (
+stories.add('Default', () => (
+	<PanZoomBody>
+		<GraphExample />
+	</PanZoomBody>
+));
+
+stories.add('With map', () => (
 		<PanZoomWrapper
 			outerDimensions={{ height: 400, width: 600 }}
-			innerDimensions={{ width: 1000, height: 1000 }}
+			innerDimensions={{ width: graphWidth, height: graphHeight }}
 		>
 			{ ({...rest}) =>
 				<React.Fragment>
@@ -58,9 +70,11 @@ stories.add('PanZoom', () => (
 							<GraphExample />
 						</PanZoomBody>
 					</div>
-					<PanZoomMap {...rest}>
-						<GraphExample showText={false} />
-					</PanZoomMap>
+					<div style={{ margin: "1rem" }}>
+						<PanZoomMap {...rest}>
+							<GraphExample simple />
+						</PanZoomMap>
+					</div>
 				</React.Fragment>
 			}
 		</PanZoomWrapper>

@@ -1,4 +1,6 @@
 import React from 'react';
+import { ZoomIn16, ZoomOut16, ZoomReset16 } from "@carbon/icons-react";
+import { Button } from "carbon-components-react";
 import settings from 'carbon-components/src/globals/js/settings';
 import {min} from 'd3-array';
 
@@ -8,15 +10,15 @@ export default ({
 		children,
 		outerDimensions,
 		innerDimensions,
-		mapHeight = 180,
-		mapWidth = 172,
+		maxHeight = 180,
+		maxWidth = 172,
 		onZoomIn = () => {},
 		onZoomOut = () => {},
 		onReset = () => {},
 		transform = {}
 	}) =>
 {
-	const namespace = `${prefix}--cc--mini-map`;
+	const namespace = `${prefix}--cc--pan-zoom-map`;
 
 	const {k,x,y} = transform;
 
@@ -32,54 +34,56 @@ export default ({
 	const inverse = invertMatrix(k, x, y);
 	const { translateX, translateY, scale } = inverse;
 
-	const scaleFactor = min([mapHeight / innerDimensions.height, mapWidth / innerDimensions.width]);
+	const scaleFactor = min([maxHeight / innerDimensions.height, maxWidth / innerDimensions.width]);
 
 	const scalePercentage = Math.round(k * 100);
 
 	return (
 		<div className={namespace}>
-			<div style={{ display: "flex" }}>
-				<span>{`${scalePercentage}%`}</span>
-				<button onClick={onZoomIn}>+</button>
-				<button onClick={onZoomOut}>-</button>
-				<button onClick={onReset}>=</button>
+			<div className={`${namespace}__toolbar`}>
+				<div className={`${namespace}__percentage`}>
+					{`${scalePercentage}%`}
+				</div>
+				<div className={`${namespace}__controls`}>
+					<div className={`${namespace}__control`}>
+						<Button onClick={onZoomIn} hasIconOnly kind={`ghost`} size={`small`} renderIcon={ZoomIn16} />
+					</div>
+					<div className={`${namespace}__control`}>
+						<Button onClick={onZoomOut} hasIconOnly kind={`ghost`} size={`small`} renderIcon={ZoomOut16} />
+					</div>
+					<div className={`${namespace}__control`}>
+						<Button onClick={onReset} hasIconOnly kind={`ghost`} size={`small`} renderIcon={ZoomReset16} />
+					</div>
+				</div>
 			</div>
 
 			<div
 				style={{
-					height: mapHeight,
-					width: mapWidth,
-					border: "1px solid red",
+					height: innerDimensions.height * scaleFactor,
+					width: innerDimensions.width * scaleFactor,
 					boxSizing: "border-box",
 					overflow: "hidden",
 					position: "relative"
 				}}
 			>
-				<div style={{
-					backgroundColor: "yellow",
-					pointerEvents: "none",
-					userSelect: "none",
-					height: innerDimensions.height,
-					width: innerDimensions.width,
-					transform: `scale(${scaleFactor})`,
-					transformOrigin: '0 0' }}
-				>
-					{children}
+					<div style={{
+						pointerEvents: "none",
+						userSelect: "none",
+						height: innerDimensions.height,
+						width: innerDimensions.width,
+						transform: `scale(${scaleFactor})`,
+						transformOrigin: '0 0' }}
+					>
+						{children}
 
-					<div className={`mini-map__screen`}
-						style={{
-							position: 'absolute',
-							backgroundColor: 'blue',
-							opacity: 0.5,
-							zIndex: 1,
-							top: 0,
-							left: 0,
-							height: outerDimensions.height,
-							width: outerDimensions.width,
-							transformOrigin: '0 0',
-							transform: `matrix(${scale}, 0, 0, ${scale}, ${translateX}, ${translateY})`,
-						}}/>
-				</div>
+						<div className={`${namespace}__screen`}
+							style={{
+								height: outerDimensions.height,
+								width: outerDimensions.width,
+								transformOrigin: '0 0',
+								transform: `matrix(${scale}, 0, 0, ${scale}, ${translateX}, ${translateY})`,
+							}}/>
+					</div>
 			</div>
 		</div>
 	);

@@ -1,0 +1,54 @@
+@import './../vendor/carbon-components/scss/globals/scss/vars';
+@import './../vendor/@carbon/themes/scss/tokens';
+@import './../vendor/@carbon/layout/scss/spacing';
+@import './../vendor/@carbon/type/scss/font-face/sans';
+@import './../vendor/@carbon/elements/scss/import-once/import-once';
+@import './../vendor/carbon-components/scss/globals/scss/_helper-mixins';
+@import './../vendor/carbon-components/scss/globals/scss/layer';
+@import './../vendor/carbon-components/scss/components/button//button';
+
+@include exports('cc-pan-zoom') {
+	.#{$prefix}--#{$charts-prefix}--pan-zoom__outer {
+		overflow: hidden;
+	}
+
+	.#{$prefix}--#{$charts-prefix}--pan-zoom__inner {
+		height: 100%;
+		width: 100%;
+	}
+
+	.#{$prefix}--#{$charts-prefix}--pan-zoom-map {
+		background-color: $ui-01;
+		overflow: hidden;
+		padding: carbon--mini-units(1);
+		box-shadow: $box-shadow--raised;
+		user-select: none;
+	}
+
+	.#{$prefix}--#{$charts-prefix}--pan-zoom-map__percentage {
+		@include carbon--type-style($name: label-01);
+		color: $text-02;
+		user-select: none;
+	}
+
+	.#{$prefix}--#{$charts-prefix}--pan-zoom-map__toolbar {
+		display: flex;
+		justify-content: space-between;
+		overflow: hidden;
+		align-items: center;
+	}
+
+	.#{$prefix}--#{$charts-prefix}--pan-zoom-map__controls {
+		display: flex;
+	}
+
+	.#{$prefix}--#{$charts-prefix}--pan-zoom-map__screen {
+		position: absolute;
+		background-color: rgba(15,98,254,0.2);
+		border: 4px solid $hover-primary;
+		opacity: 0.5;
+		z-index: 1;
+		top: 0;
+		left: 0;
+	}
+}
