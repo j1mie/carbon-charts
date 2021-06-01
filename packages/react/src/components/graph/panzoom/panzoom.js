@@ -6,7 +6,7 @@ import panzoom from 'panzoom';
 
 const { prefix } = settings;
 
-const D3PanZoom = ({ children, onTransform }) => {
+const D3PanZoom = ({ children, onTransform = () => {} }) => {
 	const namespace = `${prefix}--cc--panzoom`;
 	const containerRef = useRef(null);
 	const innerRef = useRef(null);
