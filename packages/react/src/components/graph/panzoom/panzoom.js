@@ -1,4 +1,4 @@
-import React, {useRef, useLayoutEffect} from 'react';
+import React, {useRef, useLayoutEffect, useReducer} from 'react';
 import settings from 'carbon-components/src/globals/js/settings';
 import { zoom, zoomIdentity, zoomTransform } from 'd3-zoom';
 import { select, event } from 'd3-selection';
@@ -6,36 +6,46 @@ import panzoom from 'panzoom';
 
 const { prefix } = settings;
 
-const D3PanZoom = ({ children, onTransform = () => {} }) => {
+const D3PanZoom = ({ children, containerDimensions, onTransform = () => {}, scaleExtent = [0.25, 1], transform = {} }) => {
 	const namespace = `${prefix}--cc--panzoom`;
 	const containerRef = useRef(null);
 	const innerRef = useRef(null);
+	const panZoomRef = useRef(null);
+
+	const {k,x,y} = transform;
 
 	useLayoutEffect(() => {
 		const element = select(containerRef.current);
 
-		const zoomed = zoom()
-			.scaleExtent([0.25, 1])
-			.on("zoom", () => {
-				const {x,y,k} = event.transform;
-				innerRef.current.style.transform = `translate(${x}px, ${y}px) scale(${k})`;
-				innerRef.current.style.transformOrigin = "0 0";
+		panZoomRef.current = zoom()
+			.scaleExtent(scaleExtent);
 
-				onTransform(event.transform);
-			})
-			;
+		panZoomRef.current.on("zoom", () => {
+			const {x,y,k} = event.transform;
+			innerRef.current.style.transform = `translate(${x}px, ${y}px) scale(${k})`;
+			innerRef.current.style.transformOrigin = "0 0";
+
+			onTransform(event.transform);
+		});
 
 		element
-			.call(zoomed)
-			.call(zoomed.transform, zoomIdentity)
+			.call(panZoomRef.current)
+			.call(panZoomRef.current.transform, zoomIdentity)
+
+		element.call(panZoomRef.current.transform, zoomIdentity.translate(x, y).scale(k));
 
 		return () => {
-			zoomed.on("zoom", null);
+			panZoomRef.current.on("zoom", null);
 		}
 	}, []);
 
+	useLayoutEffect(() => {
+		const element = select(containerRef.current);
+		element.call(panZoomRef.current.transform, zoomIdentity.translate(x, y).scale(k));
+	}, [x,y,k]);
+
 	return (
-		<div ref={containerRef} className={namespace} style={{ height: "100%", width: "100%" }}>
+		<div ref={containerRef} className={namespace} style={{ height: containerDimensions.height, width: containerDimensions.width, overflow: "hidden" }}>
 			<div ref={innerRef} style={{ height: "100%", width: "100%" }}>
 				{children}
 			</div>
