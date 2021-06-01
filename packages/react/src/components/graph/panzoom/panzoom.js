@@ -22,13 +22,12 @@ const D3PanZoom = ({ children, onTransform = () => {} }) => {
 				innerRef.current.style.transformOrigin = "0 0";
 
 				onTransform(event.transform);
-			});
+			})
+			;
 
 		element
 			.call(zoomed)
 			.call(zoomed.transform, zoomIdentity)
-
-		onTransform(zoomTransform(element.node()));
 
 		return () => {
 			zoomed.on("zoom", null);
