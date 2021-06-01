@@ -6,8 +6,8 @@ const { prefix } = settings;
 
 export default ({
 		children,
-		containerDimensions,
-		contentDimensions,
+		outerDimensions,
+		innerDimensions,
 		mapHeight = 180,
 		mapWidth = 172,
 		onZoomIn = () => {},
@@ -27,17 +27,14 @@ export default ({
 		scale: scale / denominator,
 		translateX: (scale * translateX) / -denominator,
 		translateY: (scale * translateY) / -denominator
-	};
-	}
+	};}
 
 	const inverse = invertMatrix(k, x, y);
 	const { translateX, translateY, scale } = inverse;
 
-	const scaleFactor = min([mapHeight / contentDimensions.height, mapWidth / contentDimensions.width]);
+	const scaleFactor = min([mapHeight / innerDimensions.height, mapWidth / innerDimensions.width]);
 
 	const scalePercentage = Math.round(k * 100);
-
-	// Todo: investigate whether we can add in a ref to calculate the content dimensions for us
 
 	return (
 		<div className={namespace}>
@@ -62,8 +59,8 @@ export default ({
 					backgroundColor: "yellow",
 					pointerEvents: "none",
 					userSelect: "none",
-					height: contentDimensions.height,
-					width: contentDimensions.width,
+					height: innerDimensions.height,
+					width: innerDimensions.width,
 					transform: `scale(${scaleFactor})`,
 					transformOrigin: '0 0' }}
 				>
@@ -77,8 +74,8 @@ export default ({
 							zIndex: 1,
 							top: 0,
 							left: 0,
-							height: containerDimensions.height,
-							width: containerDimensions.width,
+							height: outerDimensions.height,
+							width: outerDimensions.width,
 							transformOrigin: '0 0',
 							transform: `matrix(${scale}, 0, 0, ${scale}, ${translateX}, ${translateY})`,
 						}}/>
