@@ -1,7 +1,7 @@
 import React, {useRef, useState, useLayoutEffect} from 'react';
 import { storiesOf } from '@storybook/react';
-import PanZoom, {D3PanZoom} from './panzoom';
-import MiniMap from './minimap';
+import PanZoom from './panzoom';
+import MiniMap from '../minimap/minimap';
 import Card from '../card/card';
 
 const stories = storiesOf('Experimental|PanZoom', module);
@@ -9,29 +9,19 @@ stories.addDecorator((story) => (
 	<div className="container theme--white">{story()}</div>
 ));
 
-stories.add('Default', () => (
-	<div style={{ border: "1px solid #e0e0e0", overflow: "hidden", height: 400, width: 600 }}>
-		<PanZoom>
-			<div style={{ padding: "2rem", width: 300 }}>
-				<Card title="Title" description="Description" />
-			</div>
-		</PanZoom>
-	</div>
-));
-
-stories.add('D3', () => (
+stories.add('PanZoom', () => (
 		<div style={{ border: "1px solid #e0e0e0", overflow: "hidden", height: 400, width: 600 }}>
-			<D3PanZoom>
+			<PanZoom>
 				<div style={{ height: "100%", width: "100%" }}>
 					<div style={{ height: 64, width: 300 }}>
 						<Card title="Title" description="Description" />
 					</div>
 				</div>
-			</D3PanZoom>
+			</PanZoom>
 		</div>
 ));
 
-stories.add('Mini map', () => {
+stories.add('With mini map', () => {
 
 	const [transform, setTransform] = useState(
 		{ x:0, y:0, k: 1 }
@@ -94,19 +84,19 @@ stories.add('Mini map', () => {
 	return (
 		<React.Fragment>
 			<div style={{ border: "1px solid #eee", height: containerDimensions.height, width: containerDimensions.width }}>
-				<D3PanZoom
+				<PanZoom
 					containerDimensions={containerDimensions}
 					onTransform={handleTransform}
 					scaleExtent={[minZoom, maxZoom]}
 					transform={transform}
 				>
 					{content}
-				</D3PanZoom>
+				</PanZoom>
 			</div>
 			<div style={{ marginTop: "1rem" }}>
 				<MiniMap
-					contentDimensions={contentDimensions}
 					containerDimensions={containerDimensions}
+					contentDimensions={contentDimensions}
 					onZoomOut={handleZoomOut}
 					onZoomIn={handleZoomIn}
 					onReset={handleReset}
@@ -116,41 +106,5 @@ stories.add('Mini map', () => {
 				</MiniMap>
 			</div>
 		</React.Fragment>
-	)
-});
-
-stories.add('Mini map (using refs  to calculate width)', () => {
-
-	const [transform, setTransform] = useState(null);
-	const [innerDimensions, setInnerDimensions] = useState(null);
-	const [containerDimensions, setContainerDimensions] = useState(null);
-
-	const containerRef = useRef(null);
-	const innerRef = useRef(null);
-
-	const handleTransform = (transform) => {
-		setTransform(transform);
-	};
-
-	useLayoutEffect(() => {
-		const { offsetHeight, offsetWidth } = innerRef.current;
-		setInnerDimensions({offsetHeight, offsetWidth});
-	}, []);
-
-	useLayoutEffect(() => {
-		const { offsetHeight, offsetWidth } = containerRef.current;
-		setContainerDimensions({offsetHeight, offsetWidth});
-	}, []);
-
-	return (
-		<div ref={containerRef} style={{ border: "1px solid #e0e0e0", overflow: "hidden", height: 400, width: 600 }}>
-			<D3PanZoom onTransform={handleTransform}>
-				<div ref={innerRef} style={{ height: "100%", width: "100%" }}>
-					<div style={{ height: 64, width: 300 }}>
-						<Card title="Title" description="Description" />
-					</div>
-				</div>
-			</D3PanZoom>
-		</div>
 	)
 });

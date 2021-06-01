@@ -2,11 +2,20 @@ import React, {useRef, useLayoutEffect, useReducer} from 'react';
 import settings from 'carbon-components/src/globals/js/settings';
 import { zoom, zoomIdentity, zoomTransform } from 'd3-zoom';
 import { select, event } from 'd3-selection';
-import panzoom from 'panzoom';
 
 const { prefix } = settings;
 
-const D3PanZoom = ({ children, containerDimensions, onTransform = () => {}, scaleExtent = [0.25, 1], transform = {} }) => {
+const PanZoom = ({
+	children,
+	containerDimensions = { height: "100%", width: "100%" },
+	onTransform = () => {},
+	scaleExtent = [0.25, 1],
+	transform = {
+		x: 0,
+		y: 0,
+		k: 1
+	}
+}) => {
 	const namespace = `${prefix}--cc--panzoom`;
 	const containerRef = useRef(null);
 	const innerRef = useRef(null);
@@ -53,34 +62,4 @@ const D3PanZoom = ({ children, containerDimensions, onTransform = () => {}, scal
 	);
 };
 
-export default ({ children, onTransform = () => {}, options = {
-	minZoom: .25,
-	maxZoom: 1,
-	bounds: true
-} }) => {
-	const namespace = `${prefix}--cc--panzoom`;
-	const elementRef = useRef(null);
-	const panzoomRef = useRef(null);
-
-	useLayoutEffect(() => {
-		panzoomRef.current = panzoom(elementRef.current, options);
-
-		onTransform(panzoomRef.current.getTransform())
-
-		panzoomRef.current.on('transform', (e) => {
-			onTransform(e.getTransform())
-		});
-
-		return () => {
-			panzoomRef.current.dispose();
-		}
-}, []);
-
-	return (
-		<div ref={elementRef} className={namespace}>
-			{children}
-		</div>
-	);
-};
-
-export { D3PanZoom };
+export default PanZoom;

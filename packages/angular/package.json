@@ -76,7 +76,6 @@
 		"elkjs": "0.7.1",
 		"karma-webpack": "4.0.2",
 		"ng-packagr": "5.7.1",
-		"panzoom": "9.4.2",
 		"rxjs": "6.3.3",
 		"tsickle": "0.37.1",
 		"tslib": "1.10.0",
