@@ -13,6 +13,7 @@ withOptions({
 // require('!style-loader!css-loader!@carbon/charts/demo/styles.css');
 // Temporary override for local style testing
 require('!style-loader!css-loader!sass-loader!../../core/src/styles/styles-white.scss');
+// require('!style-loader!css-loader!carbon-components/css/carbon-components.css');
 
 const req = require.context('../', true, /.stories.js$/);
 function loadStories() {

@@ -5,7 +5,8 @@
 @import './../vendor/@carbon/elements/scss/import-once/import-once';
 @import './../vendor/carbon-components/scss/globals/scss/_helper-mixins';
 @import './../vendor/carbon-components/scss/globals/scss/layer';
-@import './../vendor/carbon-components/scss/components/button//button';
+@import './../vendor/carbon-components/scss/components/button/button';
+@import './../vendor/carbon-components/scss/components/tooltip/tooltip';
 
 @include exports('cc-pan-zoom') {
 	.#{$prefix}--#{$charts-prefix}--pan-zoom__outer {
@@ -19,8 +20,7 @@
 
 	.#{$prefix}--#{$charts-prefix}--pan-zoom-map {
 		background-color: $ui-01;
-		overflow: hidden;
-		padding: carbon--mini-units(1);
+		padding: 0 carbon--mini-units(1) carbon--mini-units(1) carbon--mini-units(1);
 		box-shadow: $box-shadow--raised;
 		user-select: none;
 	}

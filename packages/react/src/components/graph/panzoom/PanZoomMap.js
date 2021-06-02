@@ -80,13 +80,13 @@ export default ({
 				</div>
 				<div className={`${namespace}__controls`}>
 					<div className={`${namespace}__control`}>
-						<Button onClick={onZoomIn} hasIconOnly kind={`ghost`} size={`small`} renderIcon={ZoomIn16} />
+						<Button onClick={onZoomIn} hasIconOnly kind={`ghost`} size={`small`} renderIcon={ZoomIn16} iconDescription={"Zoom in"} />
 					</div>
 					<div className={`${namespace}__control`}>
-						<Button onClick={onZoomOut} hasIconOnly kind={`ghost`} size={`small`} renderIcon={ZoomOut16} />
+						<Button onClick={onZoomOut} hasIconOnly kind={`ghost`} size={`small`} renderIcon={ZoomOut16} iconDescription={"Zoom out"} />
 					</div>
 					<div className={`${namespace}__control`}>
-						<Button onClick={onReset} hasIconOnly kind={`ghost`} size={`small`} renderIcon={ZoomReset16} />
+						<Button onClick={onReset} hasIconOnly kind={`ghost`} size={`small`} renderIcon={ZoomReset16} iconDescription={"Reset zoom"} />
 					</div>
 				</div>
 			</div>
