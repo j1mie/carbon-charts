@@ -21,7 +21,7 @@ export default ({
 		if (transform.k < scaleExtent[1]) {
 			setTransform({
 				...transform,
-				k: transform.k + 0.1
+				k: transform.k + 0.25
 			})
 		}
 	}
@@ -30,7 +30,7 @@ export default ({
 		if (transform.k > scaleExtent[0]) {
 			setTransform({
 				...transform,
-				k: transform.k - 0.1
+				k: transform.k - 0.25
 			})
 		}
 	}
