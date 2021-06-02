@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { ZoomIn16, ZoomOut16, ZoomReset16 } from "@carbon/icons-react";
 import { Button } from "carbon-components-react";
 import settings from 'carbon-components/src/globals/js/settings';
@@ -15,6 +15,7 @@ export default ({
 		onZoomIn = () => {},
 		onZoomOut = () => {},
 		onReset = () => {},
+		onTransform = () => {},
 		transform = {}
 	}) =>
 {
@@ -38,6 +39,39 @@ export default ({
 
 	const scalePercentage = Math.round(k * 100);
 
+	const [isDragging, setIsDragging] = useState(false)
+
+	const setPosition = (e) => {
+		let currentTargetRect = e.currentTarget.getBoundingClientRect();
+		const event_offsetX = e.pageX - currentTargetRect.left, event_offsetY = e.pageY - currentTargetRect.top;
+
+		const newPosX = (event_offsetX / scaleFactor) * k / -1;
+		const newPosY = (event_offsetY / scaleFactor) * k / -1;
+
+		onTransform({
+			x: newPosX + (outerDimensions.width / 2),
+			y: newPosY + (outerDimensions.height / 2),
+			k
+		})
+	}
+
+	const handleMouseMove = e => {
+		isDragging && setPosition(e);
+		e.preventDefault();
+	};
+
+	const handleMouseDown = e => {
+		setIsDragging(true);
+	};
+
+	const handleClick = (e) => {
+		setPosition(e);
+	}
+
+	const handleMouseUp = e => {
+		setIsDragging(false);
+	};
+
 	return (
 		<div className={namespace}>
 			<div className={`${namespace}__toolbar`}>
@@ -57,8 +91,21 @@ export default ({
 				</div>
 			</div>
 
-			<div style={{ height: maxHeight, width: maxWidth, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
 			<div
+				style={{
+					height: maxHeight,
+					width: maxWidth,
+					display: "flex",
+					alignItems: "center",
+					justifyContent: "center",
+					overflow: "hidden"
+				}}>
+			<div
+				onMouseDown={() => handleMouseDown()}
+				onMouseLeave={() => handleMouseUp()}
+				onClick={(e) => handleClick(e)}
+				onMouseUp={() => handleMouseUp()}
+				onMouseMove={e => handleMouseMove(e)}
 				style={{
 					height: innerDimensions.height * scaleFactor,
 					width: innerDimensions.width * scaleFactor,
@@ -67,14 +114,17 @@ export default ({
 				}}
 			>
 					<div style={{
-						pointerEvents: "none",
-						userSelect: "none",
 						height: innerDimensions.height,
 						width: innerDimensions.width,
 						transform: `scale(${scaleFactor})`,
 						transformOrigin: '0 0' }}
 					>
-						{children}
+						<div style={{
+							pointerEvents: "none",
+							userSelect: "none",
+						}}>
+							{children}
+						</div>
 
 						<div className={`${namespace}__screen`}
 							style={{
@@ -82,7 +132,8 @@ export default ({
 								width: outerDimensions.width,
 								transformOrigin: '0 0',
 								transform: `matrix(${scale}, 0, 0, ${scale}, ${translateX}, ${translateY})`,
-							}}/>
+								cursor: isDragging ? 'grabbing' : 'grab'
+						}}/>
 					</div>
 			</div>
 			</div>

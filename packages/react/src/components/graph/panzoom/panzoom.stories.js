@@ -27,7 +27,7 @@ const GraphExample = ({simple = false}) => {
 				<Edge
 					source={{ x: 200, y: 132 }}
 					target={{ x: 600, y: 132 }}
-					variant={'dash-sm'}
+					variant={!simple && 'dash-sm'}
 				/>
 
 				<foreignObject
