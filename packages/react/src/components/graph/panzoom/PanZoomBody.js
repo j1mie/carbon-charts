@@ -9,8 +9,7 @@ export default ({
 	children,
 	outerDimensions = { height: "100%", width: "100%" },
 	onTransform = () => {},
-	scaleExtent = [0.25, 1],
-	panZoomRef,
+	scaleExtent = [0.25, 1.5],
 	transform = {
 		x: 0,
 		y: 0,
@@ -20,8 +19,7 @@ export default ({
 	const namespace = `${prefix}--cc--panzoom`;
 	const outerRef = useRef(null);
 	const innerRef = useRef(null);
-
-	panZoomRef = panZoomRef || useRef(null);
+	const panZoomRef = useRef(null);
 
 	const {k,x,y} = transform;
 
@@ -33,7 +31,7 @@ export default ({
 			innerRef.current.style.transformOrigin = "0 0";
 
 			onTransform(event.transform);
-		});
+	});
 
 	useLayoutEffect(() => {
 		panZoomRef.current = select(outerRef.current);

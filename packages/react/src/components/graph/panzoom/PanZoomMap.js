@@ -10,8 +10,8 @@ export default ({
 		children,
 		outerDimensions,
 		innerDimensions,
-		maxHeight = 180,
-		maxWidth = 172,
+		maxHeight = 136,
+		maxWidth = 176,
 		onZoomIn = () => {},
 		onZoomOut = () => {},
 		onReset = () => {},
@@ -57,12 +57,12 @@ export default ({
 				</div>
 			</div>
 
+			<div style={{ height: maxHeight, width: maxWidth, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
 			<div
 				style={{
 					height: innerDimensions.height * scaleFactor,
 					width: innerDimensions.width * scaleFactor,
 					boxSizing: "border-box",
-					overflow: "hidden",
 					position: "relative"
 				}}
 			>
@@ -84,6 +84,7 @@ export default ({
 								transform: `matrix(${scale}, 0, 0, ${scale}, ${translateX}, ${translateY})`,
 							}}/>
 					</div>
+			</div>
 			</div>
 		</div>
 	);

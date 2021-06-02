@@ -17,8 +17,6 @@ export default ({
 		setTransform(transform);
 	};
 
-	const panZoomRef = useRef(null);
-
 	const onZoomIn = () => {
 		if (transform.k < scaleExtent[1]) {
 			setTransform({
@@ -54,7 +52,6 @@ export default ({
 				onTransform,
 				onZoomIn,
 				onZoomOut,
-				panZoomRef,
 				scaleExtent,
 				transform
 			})}

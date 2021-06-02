@@ -13,7 +13,7 @@ stories.addDecorator((story) => (
 	<div className="container theme--white" style={{ display: "flex" }}>{story()}</div>
 ));
 
-const graphHeight = 1000;
+const graphHeight = 800;
 const graphWidth = 1000;
 
 const GraphExample = ({simple = false}) => {
